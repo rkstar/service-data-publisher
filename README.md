@@ -19,4 +19,4 @@ Each service object will have:
 * avatar (http:// url)
 
 ## Cool feature
-This package automatically handles merges that happen with the awesome [mikael:accounts-merge](https://github.com/lirbank/meteor-accounts-merge) package.  CHECK IT OUT!
+This package automatically handles merges that happen with the awesome [mikael:accounts-merge](https://github.com/lirbank/meteor-accounts-merge) package.  *No configuration needed!*
