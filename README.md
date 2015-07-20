@@ -10,7 +10,7 @@ This allows you to have external services data available to your application wit
 `meteor add rkstar:service-data-publisher`
 
 ## Usage
-This package will automatically publish to `Meteor.user().service_data`.  You *DO NOT* need to subscribe to a publication.
+This package will automatically publish to `Meteor.user().services_data`.  You *DO NOT* need to subscribe to a publication.
 The `Meteor.user().services_data` collection subset will include a key for each service that is available (mentioned above).
 Each service object will have:
 * id (service id)
