@@ -29,7 +29,7 @@ Meteor.startup(function(){
   // if we are, we'll automagically add the email data we've
   // just merged into the emails field on this account!
   // this is some added sweetness for the developer. :)
-  if( AccountsMerge !== 'undefined' ){
+  if( typeof AccountsMerge === 'object' ){
     AccountsMerge.onMerge = function( user, merged ){
       var modified_user = user
       _.keys(user.services).map(function(name){
