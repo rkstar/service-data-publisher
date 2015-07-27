@@ -1,12 +1,3 @@
-Meteor.publish(null, function(){
-  var services_data = {
-    'emails': 1,
-    'profile': 1,
-    'services_data': 1
-  }
-  return Meteor.users.find({_id: this.userId},{fields:services_data})
-})
-
 Meteor.startup(function(){
   Accounts.onCreateUser(function(options, user){
     // create a new field on our user to store
@@ -29,7 +20,7 @@ Meteor.startup(function(){
   // if we are, we'll automagically add the email data we've
   // just merged into the emails field on this account!
   // this is some added sweetness for the developer. :)
-  if( typeof AccountsMerge === 'object' ){
+  if( Package['mikael:accounts-merge'] ){
     AccountsMerge.onMerge = function( user, merged ){
       var modified_user = user
       _.keys(user.services).map(function(name){
