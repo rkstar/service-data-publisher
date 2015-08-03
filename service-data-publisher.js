@@ -1,12 +1,3 @@
-Meteor.publish(null, function(){
-  var services_data = {
-    'emails': 1,
-    'profile': 1,
-    'services_data': 1
-  }
-  return Meteor.users.find({_id: this.userId},{fields:services_data})
-})
-
 Meteor.startup(function(){
   Accounts.onCreateUser(function(options, user){
     // create a new field on our user to store
@@ -29,7 +20,7 @@ Meteor.startup(function(){
   // if we are, we'll automagically add the email data we've
   // just merged into the emails field on this account!
   // this is some added sweetness for the developer. :)
-  if( typeof AccountsMerge === 'object' ){
+  if( Package['mikael:accounts-merge'] ){
     AccountsMerge.onMerge = function( user, merged ){
       var modified_user = user
       _.keys(user.services).map(function(name){
@@ -41,7 +32,6 @@ Meteor.startup(function(){
 
       // sanitize and add the services data to this user
       modified_user.services_data = ServiceDataPublisher.sanitizeServicesData(modified_user.services)
-
       Meteor.users.update({_id: user._id},{$set:modified_user})
     }
   }
@@ -54,29 +44,12 @@ var ServiceDataPublisher = {
   },
   sanitizeServicesData: function( services ){
     var sanitized = {},
-      social_networks = ['twitter','facebook','google','linkedin']
+      social_networks = ['twitter','facebook','google','linkedin','buffer']
     social_networks.map(function(network){
       if( services[network] ){
         sanitized[network] = this.translateServiceData(network, services[network])
       }
     }, this)
-    // buffer is a special case...
-    if( services.buffer ){
-      sanitized.buffer = this.translateBufferServiceData(services.buffer)
-      if( sanitized.facebook && sanitized.buffer.facebook ){
-        sanitized.facebook.avatar = sanitized.buffer.facebook.avatar
-      }
-      // clean up the buffer object
-      social_networks.map(function( network ){
-        if( sanitized.buffer[network] ){
-          if( !sanitized[network] ){
-            sanitized[network] = _.clone(sanitized.buffer[network])
-          }
-          delete sanitized.buffer[network]
-        }
-      }, this)
-    }
-
     return sanitized
   },
   translateServiceData: function( network, data ){
@@ -92,8 +65,10 @@ var ServiceDataPublisher = {
         translated = this.translateGoogleServiceData(data)
       break
       case 'linkedin':
-        translated = this.translateLinkedInServicesData(data)
+        translated = this.translateLinkedInServiceData(data)
         break
+      case 'buffer':
+        translated = this.translateBufferServiceData(data)
     }
     return translated
   },
@@ -120,7 +95,7 @@ var ServiceDataPublisher = {
       email: data.email
     }
   },
-  translateLinkedInServicesData: function( data ){
+  translateLinkedInServiceData: function( data ){
     return {
       id: data.id,
       avatar: data.avatar_https,
@@ -131,26 +106,19 @@ var ServiceDataPublisher = {
   translateBufferServiceData: function ( data ){
     var services = {id: data.id}
     _.keys(data.services).map(function(service){
-      var service_data = data.services[service]
-      var defaults = {
-        id: service_data.service_id,
-        avatar: service_data.avatar_https
-      }
-      switch( service ){
-        case 'twitter':
-          services.twitter = _.defaults({
-            username: service_data.service_username
-          }, defaults)
-          break
-        case 'facebook':
-        case 'google':
-        case 'linkedin':
-          services[service] = _.defaults({
-            name: service_data.service_username
-          }, defaults)
-          break
-      }
-    })
+      var service_data = data.services[service],
+        account_data = {}
+      services[service] = []
+      service_data = (service_data instanceof Array) ? service_data : [service_data]
+      service_data.map(function(account_data){
+        services[service].push({
+          id: account_data.service_id,
+          avatar: account_data.avatar_https,
+          username: account_data.service_username
+        })
+      }, this)
+    }, this)
+
     return services
   },
   addServiceEmail: function( user, service, keys ){
