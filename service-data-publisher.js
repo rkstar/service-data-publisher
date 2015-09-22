@@ -1,14 +1,19 @@
 Meteor.startup(function(){
-  Accounts.onCreateUser(function(options, user){
-    // create a new field on our user to store
-    // sanitized external data...
-    if( user.services ){
-      user.services_data = ServiceDataPublisher.sanitizeServicesData(user.services)
+  var updateServicesData = function(_id){
+    var user = Meteor.users.findOne({_id: _id})
+    if( user && user.services ){
+      Meteor.users.update({_id: _id},{'services_data': ServiceDataPublisher.sanitizeServicesData(user.services)})
     }
-    if( options.profile ){
-      user.profile = options.profile
+  }
+  // create a new field on our user to store
+  // sanitized external data...
+  Meteor.users.find().observeChanges({
+    added: function(_id){
+      updateServicesData(_id)
+    },
+    changed: function(_id){
+      updateServicesData(_id)
     }
-    return user
   })
 
   // update and sanitize services data when we log in
