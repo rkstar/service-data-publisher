@@ -1,23 +1,35 @@
 let instance = null
 class __ServiceDataPublisher__ {
-  constructor(){
+  constructor(opts=[]){
     instance = instance || this
+    this.configure(opts)
     return instance
   }
 
-  addSocialNetwork(name, translator){
-    this.social_networks.push({name, translator})
+  configure(opts=[]){
+    if( _.isArray(opts) && (opts.length > 0) ){
+      opts.map((config)=>{
+        this.addService(config.service, config.translator)
+      })
+    }
+  }
+
+  addService(service, translator){
+    if( _.isString(service) && (service.length > 0) && _.isFunction(translator) ){
+      this.services[service] = translator
+    }
   }
 
   updateServicesData(user){
+    let sanitized_data = this.sanitizeServicesData(user.services)
     Meteor.users.update({_id: user._id},{$set:{
-      services_data: this.sanitizeServicesData(user.servies)
+      services_data: sanitized_data
     }})
   }
 
   sanitizeServicesData(services){
     let sanitized_data = {}
-    this.social_networks.map((network)=>{
+    this.services.map((network)=>{
       if( services[network.name] ){
         sanitized_data[network.name] = network.translator(services[network.name])
       }
@@ -47,17 +59,17 @@ class __ServiceDataPublisher__ {
     return user
   }
 
-  get social_networks(){
-    if( !this._social_networks ){
-      this.social_networks = []
+  get services(){
+    if( !this._services ){
+      this.services = []
     }
-    return this._social_networks
+    return this._services
   }
-  set social_networks(value){
+  set services(value){
     if( !_.isArray(value) ){
       value = [value]
     }
-    this._social_networks = value
+    this._services = value
   }
 }
 
