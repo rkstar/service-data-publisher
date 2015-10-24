@@ -1,15 +1,9 @@
 Meteor.startup(()=>{
-  let updateServicesData = function(doc){
-    Meteor.users.update({_id: doc._id},{$set:{
-      services_data: ServiceDataPublisher.sanitizeServicesData(doc.services)
-    }})
-  }
-
   // create a new field on our user to store
   // sanitized external data...
   Meteor.users.find().observe({
-    added: updateServicesData,
-    changed: updateServicesData
+    added: function(doc){ ServiceDataPublisher.updateServicesData(doc) },
+    changed: function(doc){ ServiceDataPublisher.updateServicesData(doc) }
   })
 
   // update and sanitize services data when we log in
