@@ -18,5 +18,26 @@ Each service object will have:
 * email (if available)
 * avatar (http:// url)
 
+## Default services supported
+* twitter
+* facebook
+* google+
+* linkedin
+* buffer
+
+## Adding a Service
+You can add any external service you would like to the `ServiceDataPublisher` and it will automatically start serving your external data via the `services_data` var in the `Meteor.user()` object!
+```javascript
+ServiceDataPublisher.addSocialNetwork('MyAwesomeNetwork',(data)=>{
+  return {
+    id: data.service_id,
+    name: data.service_first_and_last_name,
+    email: data.email_address,
+    avatar: data.some_crazy_var_that_keeps_my_avatar_image_url_in_it,
+    other_data: data.custom_fields_for_my_service_can_be_added_too
+  }
+})
+```
+
 ## Cool feature
 This package automatically handles merges that happen with the awesome [mikael:accounts-merge](https://github.com/lirbank/meteor-accounts-merge) package.  *No configuration needed!*
