@@ -12,13 +12,10 @@ class __ServiceDataPublisher__ {
         this.addService(config.service, config.translator)
       })
     }
-<<<<<<< HEAD
-=======
     // now update the logged in user config
     if( Meteor.user() ){
       this.updateServicesData(Meteor.user())
     }
->>>>>>> release/2.0.2
   }
 
   addService(service, translator){
