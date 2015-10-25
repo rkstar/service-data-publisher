@@ -9,17 +9,15 @@ class __ServiceDataPublisher__ {
   configure(opts=[]){
     if( _.isArray(opts) && (opts.length > 0) ){
       opts.map((config)=>{
-        this.addSocialNetwork(config.service, config.translator)
+        this.addService(config.service, config.translator)
       })
     }
   }
 
-  addSocialNetwork(service, translator){
-    if( !service || !_.isString(service) || !translator || !_.isFunction(translator) ){
-      return
+  addService(service, translator){
+    if( _.isString(service) && (service.length > 0) && _.isFunction(translator) ){
+      this.services[service] = translator
     }
-    // subsequent add calls will overwrite previous translators
-    this.social_networks[service] = translator
   }
 
   updateServicesData(user){
@@ -31,10 +29,9 @@ class __ServiceDataPublisher__ {
 
   sanitizeServicesData(services){
     let sanitized_data = {}
-    _.keys(this.social_networks).map((service)=>{
-      if( services[service] ){
-        let translator = this.social_networks[service]
-        sanitized_data[service] = translator(services[service])
+    this.services.map((network)=>{
+      if( services[network.name] ){
+        sanitized_data[network.name] = network.translator(services[network.name])
       }
     })
     return sanitized_data
@@ -62,14 +59,17 @@ class __ServiceDataPublisher__ {
     return user
   }
 
-  get social_networks(){
-    if( !this._social_networks ){
-      this.social_networks = {}
+  get services(){
+    if( !this._services ){
+      this.services = []
     }
-    return this._social_networks
+    return this._services
   }
-  set social_networks(value){
-    this._social_networks = (_.isObject(value)) ? value : {}
+  set services(value){
+    if( !_.isArray(value) ){
+      value = [value]
+    }
+    this._services = value
   }
 }
 

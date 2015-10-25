@@ -27,9 +27,9 @@ Each service object will have:
 
 ## Adding a Service
 You can add any external service you would like to the `ServiceDataPublisher` and it will automatically start serving your external data via the `services_data` var in the `Meteor.user()` object!
-You can add a service with this function:
+You can add individual services like this:
 ```javascript
-ServiceDataPublisher.addSocialNetwork('MyAwesomeNetwork',(data)=>{
+ServiceDataPublisher.addService('MyAwesomeNetwork',(data)=>{
   return {
     id: data.service_id,
     name: data.service_first_and_last_name,
@@ -44,6 +44,7 @@ ServiceDataPublisher.addSocialNetwork('MyAwesomeNetwork',(data)=>{
 ServiceDataPublisher.configure([{
   service: 'MyAwesomeNetwork',
   translator: function(data){
+<<<<<<< HEAD
   return {
     id: data.service_id,
     name: data.service_first_and_last_name,
@@ -56,8 +57,8 @@ ServiceDataPublisher.configure([{
 }]
 ```
 
-## Version 2 Compatibility
-Version 2.0.0 is fully backward compatible with v 1.x, and you can now add any networks or services you wish!
+## Version compatibility
+Version 2.0.x is fully backward compatible with version 1.x!
 
 ## Cool feature
 This package automatically handles merges that happen with the awesome [mikael:accounts-merge](https://github.com/lirbank/meteor-accounts-merge) package.  *No configuration needed!*
