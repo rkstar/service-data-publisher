@@ -12,10 +12,6 @@ class __ServiceDataPublisher__ {
         this.addService(config.service, config.translator)
       })
     }
-    // now update the logged in user config
-    if( Meteor.user() ){
-      this.updateServicesData(Meteor.user())
-    }
   }
 
   addService(service, translator){
