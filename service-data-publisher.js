@@ -29,9 +29,10 @@ class __ServiceDataPublisher__ {
 
   sanitizeServicesData(services){
     let sanitized_data = {}
-    this.services.map((network)=>{
-      if( services[network.name] ){
-        sanitized_data[network.name] = network.translator(services[network.name])
+    _.keys(this.services).map((service)=>{
+      if( services[service] ){
+        let translator = this.services[service]
+        sanitized_data[service] = translator(services[service])
       }
     })
     return sanitized_data
