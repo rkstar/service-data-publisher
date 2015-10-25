@@ -2,7 +2,8 @@ service-data-publisher
 ===============
 
 This package automatically publishes a "safe" subset of the `user.services` collection for logged in users.
-It is able to sanitize service data from `loginWith<ExternalService>()` calls for Twitter, Facebook, Google+, LinkedIn (see the [pauli:accounts-linkedin](https://github.com/PauliBuccini/meteor-accounts-linkedin) package), and Buffer (see my [rkstar:accounts-buffer](https://github.com/rkstar/accounts-buffer) package)
+It is able to sanitize service data from `loginWith<ExternalService>()` calls for Twitter, Facebook, Google+, LinkedIn (see the [pauli:accounts-linkedin](https://github.com/PauliBuccini/meteor-accounts-linkedin) package), and Buffer (see my [rkstar:accounts-buffer](https://github.com/rkstar/accounts-buffer) package) by default.
+This package now also allows you to configure it in any way you'd like and add services you use or create simply by passing a config object to `ServiceDataPublisher.configure()`
 
 This allows you to have external services data available to your application without having to explicitly create and manage fields for each service you configure for your app.  It also takes care of sanitizing the services data so you don't accidentally pass access tokens and other potentially sensitive data to the client. 
 
@@ -44,7 +45,6 @@ ServiceDataPublisher.addService('MyAwesomeNetwork',(data)=>{
 ServiceDataPublisher.configure([{
   service: 'MyAwesomeNetwork',
   translator: function(data){
-<<<<<<< HEAD
   return {
     id: data.service_id,
     name: data.service_first_and_last_name,
@@ -58,7 +58,7 @@ ServiceDataPublisher.configure([{
 ```
 
 ## Version compatibility
-Version 2.0.x is fully backward compatible with version 1.x!
+Version 2.x is fully backward compatible with version 1.x!
 
 ## Cool feature
 This package automatically handles merges that happen with the awesome [mikael:accounts-merge](https://github.com/lirbank/meteor-accounts-merge) package.  *No configuration needed!*
