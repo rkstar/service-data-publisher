@@ -15,8 +15,8 @@ Meteor.startup(()=>{
   // if we are, we'll automagically add the email data we've
   // just merged into the emails field on this account!
   // this is some added sweetness for the developer. :)
-  if( Package['mikael:accounts-merge'] ){
-    AccountsMerge.onMerge = function(user, mergedWith){
+  if( Package['rkstar:accounts-merge'] ){
+    AccountsMerge.onMerge(function(user, mergedWith){
       var modified_user = user
       _.keys(user.services).map((name)=>{
         var service = user.services[name]
@@ -26,6 +26,6 @@ Meteor.startup(()=>{
       })
       // update the services for this user
       ServiceDataPublisher.updateServicesData(modified_user)
-    }
+    }, true)
   }
 })
