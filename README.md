@@ -13,7 +13,8 @@ This allows you to have external services data available to your application wit
 ## Usage
 This package will automatically publish to `Meteor.user().services_data`.  You *DO NOT* need to subscribe to a publication.
 The `Meteor.user().services_data` collection subset will include a key for each service that is available (mentioned above).
-Each service object will have:
+Each service will contain an array of connected accounts for that service (see [accounts-multiply](https://github.com/rkstar/accounts-multiply).
+Each service account in that array will be an object with keys:
 * id (service id)
 * name / username (service username)
 * email (if available)
@@ -58,7 +59,12 @@ ServiceDataPublisher.configure([{
 ```
 
 ## Version compatibility
-Version 2.x is fully backward compatible with version 1.x!
+Version 3.x is fully backward compatible with versions 2.x and 1.x!
 
 ## Cool feature
+Version 3.x was built to comply with the [accounts-multiply](https://github.com/rkstar/accounts-multiply) package.  *No configuration needed!*
+
+**depcrepated**
+*I will not be supporting [mikael:accounts-merge](https://github.com/lirbank/meteor-accounts-merge) beyond 3.x of this package*
+
 This package automatically handles merges that happen with the awesome [mikael:accounts-merge](https://github.com/lirbank/meteor-accounts-merge) package.  *No configuration needed!*
