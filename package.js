@@ -1,6 +1,6 @@
 Package.describe({
   name: 'rkstar:service-data-publisher',
-  version: '3.1.0',
+  version: '4.0.1',
   // Brief, one-line summary of the package.
   summary: 'Automatically sanitized and publish relevant data from external services when logged in.',
   // URL to the Git repository containing the source code for this package.
@@ -11,20 +11,15 @@ Package.describe({
 })
 
 Package.onUse(function(api) {
-  api.versionsFrom('1.2.0.2')
+  api.versionsFrom('1.3')
   api.use('ecmascript', 'server')
   api.use('accounts-base', 'server')
   api.use('underscore', 'server')
+  api.use('modules')
 
-  api.addFiles([
-    'lib/client/subscription.js'
-    ], 'client')
-  api.addFiles([
-    'lib/server/publication.js',
-    'lib/server/service-data-publisher.js',
-    'lib/server/service-data-publisher-config.js',
-    'lib/server/startup.js'
-    ], 'server')
-
-  api.export('ServiceDataPublisher')
+  api.mainModule('lib/client/subscription.js', 'client')
+  api.mainModule('lib/server/publication.js', 'server')
+  api.mainModule('lib/server/service-data-publisher.js', 'server')
+  api.mainModule('lib/server/service-data-publisher-config.js', 'server')
+  api.mainModule('lib/server/startup.js', 'server')
 })
