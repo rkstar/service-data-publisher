@@ -58,11 +58,21 @@ ServiceDataPublisher.configure([{
 }]
 ```
 
-## Version compatibility
-Version 3.x is fully backward compatible with versions 2.x and 1.x!
+## Settings
+By default, `ServiceDataPublisher` **will not** run updates on user accounts in its initial query that attaches `observe()` methods to the cursor.
+  If you wish to override this default functionality, you can do so in `Meteor.settings`:
+```javascript
+// initializeOnStartup defaults to false
+{
+  "service-data-publisher": {
+    "initializeOnStartup": true
+  }
+}
+```
+
 
 ## Cool feature
-Version 3.x was built to comply with the [accounts-multiply](https://github.com/rkstar/accounts-multiply) package.  *No configuration needed!*
+Version 4.x was built to comply with the [accounts-multiply](https://github.com/rkstar/accounts-multiply) package.  *No configuration needed!*
 
 **depcrepated**
 *I will not be supporting [mikael:accounts-merge](https://github.com/lirbank/meteor-accounts-merge) beyond 3.x of this package*
